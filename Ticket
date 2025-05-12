@@ -1,0 +1,79 @@
+package com.trainbookingapp;
+
+import java.util.List;
+
+public class  Ticket {
+
+    private int pnrNo;
+    private int passengerCount;
+    private char source;
+    private char destination;
+    private List<Seat> seats;
+    private TicketStatus status;
+
+    public Ticket(int pnrNo, int passengerCount, char source, char destination, List<Seat> seats, TicketStatus status) {
+
+        this.pnrNo = pnrNo;
+        this.passengerCount = passengerCount;
+        this.source = source;
+        this.destination = destination;
+        this.seats = seats;
+        this.status = status;
+    }
+
+    public int getPnrNo() {
+        return pnrNo;
+    }
+
+    public void setPnrNo(int pnrNo) {
+        this.pnrNo = pnrNo;
+    }
+
+    public int getPassengerCount() {
+        return passengerCount;
+    }
+
+    public void setPassengerCount(int passengerCount) {
+        this.passengerCount = passengerCount;
+    }
+
+    public char getSource() {
+        return source;
+    }
+
+    public void setSource(char source) {
+        this.source = source;
+    }
+
+    public char getDestination() {
+        return destination;
+    }
+
+    public void setDestination(char destination) {
+        this.destination = destination;
+    }
+
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<Seat> seats) {
+        this.seats = seats;
+    }
+
+
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket [pnrNo=" + pnrNo + ", passengerCount=" + passengerCount + ", source=" + source + ", destination="
+                + destination + ", seats=" + seats + ", status=" + status + "]";
+    }
+}
