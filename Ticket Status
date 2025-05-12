@@ -1,0 +1,8 @@
+package com.trainbookingapp;
+
+public enum TicketStatus {
+
+    CONFIRMED,
+    WAITING_LIST,
+    CANCELLED
+}
