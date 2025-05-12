@@ -1,0 +1,84 @@
+package com.trainbookingapp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Train {
+    private Coach coach = new Coach();
+    private List<Stoppage> stoppage = new ArrayList<>();
+    boolean[][] seatInfo;
+    private final int MAX_WAITINGLIST = 2;
+
+    public Train() {
+        for (int i = 0; i < 5; i++) {
+            stoppage.add(new Stoppage((char) ('A' + i)));
+        }
+
+        seatInfo = new boolean[coach.getSeats().size()][stoppage.size() - 1];
+
+    }
+
+    public Coach getCoach() {
+        return coach;
+    }
+
+    public void setCoach(Coach coach) {
+        this.coach = coach;
+    }
+
+    public List<Stoppage> getStoppage() {
+        return stoppage;
+    }
+
+    public void setStoppage(List<Stoppage> stoppage) {
+        this.stoppage = stoppage;
+    }
+
+    public boolean[][] getSeatInfo() {
+        return seatInfo;
+    }
+
+    public void setSeatInfo(boolean[][] seatInfo) {
+        this.seatInfo = seatInfo;
+    }
+
+    public int getMAX_WAITINGLIST() {
+        return MAX_WAITINGLIST;
+    }
+
+    public boolean seatAvailable(int seat, char source, char destination) {
+        int sourceIndex = source - 'A';
+        int destinationIndex = destination - 'A';
+
+        for (int i = sourceIndex; i < destinationIndex; i++) {
+            if (seatInfo[seat][i]) {
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    public void makeSeatUnavailable(String seatNo, char source, char destination) {
+        int sourceIndex = source - 'A';
+        int destinationIndex = destination - 'A';
+
+        for (int i = sourceIndex; i < destinationIndex; i++) {
+            seatInfo[Integer.parseInt(seatNo)][i] = true;
+
+        }
+
+    }
+
+    public void makeSeatAvailable(int seat, char source, char destination) {
+        int sourceIndex = source - 'A';
+        int destinationIndex = destination - 'A';
+
+        for (int i = sourceIndex; i < destinationIndex; i++) {
+            seatInfo[seat][i] = false;
+
+        }
+    }
+
+}
