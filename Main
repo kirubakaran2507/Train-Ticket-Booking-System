@@ -1,0 +1,42 @@
+package com.trainbookingapp;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        BookingSystem system = new BookingSystem();
+
+        System.out.println("-------------------------------");
+        // Book ticket
+        system.bookTicket('A', 'B', 2); // 1000 {0,1}
+        system.bookTicket('A', 'B', 2); // 1001 {2,3}
+        system.bookTicket('A', 'B', 2); // 1002 {4,5}
+        system.bookTicket('A', 'B', 2); // 1003 {6,7}
+        system.bookTicket('B', 'C', 8); // 1004 {0,1,2,3,4,5,6,7}
+        system.bookTicket('B', 'C', 3); // 1005 W1 ]
+        // system.bookTicket('A', 'B', 3); // 1006 W2
+        system.bookTicket('A', 'B', 1); // 1006 w2
+
+
+        System.out.println("-------------------------------");
+
+
+        // cancellation
+        system.cancelTicket(1000, 2); // 1000 , {1} , 1005 {0}
+        system.cancelTicket(1004, 3); // 1001 , {3}
+
+
+        System.out.println("-------------------------------");
+
+
+        // booking
+        system.bookTicket('A', 'B', 2); // 1007 -->
+
+        System.out.println("-------------------------------");
+
+
+        // print chart
+        system.printChart();
+    }
+
+}
