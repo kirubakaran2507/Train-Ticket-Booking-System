@@ -1,0 +1,129 @@
+package com.trainbookingapp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
+public class BookingSystem {
+    private final Train train = new Train();
+    private int PnrCount = 1000;
+    private final Map<Integer, Ticket> ticketMap = new HashMap<>();
+    private final Queue<Ticket> waitingList = new LinkedList<>();
+
+    public void bookTicket(char source, char destination, int passengerCount) {
+        ArrayList<Seat> seats = new ArrayList<>();
+        for (int i = 0; i < train.getCoach().getMAX_SEAT(); i++) {
+            if (train.seatAvailable(i, source, destination)) {
+                seats.add(new Seat(i + ""));
+            }
+            if (seats.size() == passengerCount) {
+                break;
+            }
+        }
+
+        if (seats.size() == passengerCount) {
+            Ticket ticket = new Ticket(PnrCount++, passengerCount, source, destination, seats, TicketStatus.CONFIRMED);
+            ticketMap.put(ticket.getPnrNo(), ticket);
+
+            for (Seat seat : seats) {
+                train.makeSeatUnavailable(seat.getSeatNum(), source, destination);
+            }
+
+            System.out.println("Ticket Booked : " + ticket);
+        } else if (waitingList.size() < train.getMAX_WAITINGLIST()) {
+            int count = waitingList.size() + 1;
+            seats.removeAll(seats);
+            seats.add(new Seat("WL" + count));
+            Ticket ticket = new Ticket(PnrCount++, passengerCount, source, destination, seats,
+                    TicketStatus.WAITING_LIST);
+            ticketMap.put(ticket.getPnrNo(), ticket);
+            waitingList.add(ticket);
+            System.out.println("Ticket Booked : " + ticket);
+        } else {
+            System.out.println("No seats are available");
+        }
+
+    }
+
+    public void cancelTicket(int pnrId, int cancelCount) {
+
+        Ticket ticket = ticketMap.get(pnrId);
+        if (ticket == null) {
+            System.out.println("Enter valid pnr ");
+            return;
+        }
+
+        if (ticket.getPassengerCount() < cancelCount) {
+            System.out.println(" enter valid cancel count");
+            return;
+        }
+
+        List<Seat> seats = ticket.getSeats();
+        int count = 0;
+
+        for (Seat seat : seats) {
+            count++;
+            train.makeSeatAvailable(Integer.parseInt(seat.getSeatNum()), ticket.getSource(), ticket.getDestination());
+            if (count == cancelCount) {
+                break;
+            }
+        }
+        upgrade();
+
+    }
+
+    public void upgrade() {
+        for (Ticket ticket : waitingList) {
+
+            char source = ticket.getSource();
+            char destination = ticket.getDestination();
+            int passCount = ticket.getPassengerCount();
+            ArrayList<Seat> seats = new ArrayList<>();
+
+            for (int i = 0; i < train.getCoach().getMAX_SEAT(); i++) {
+                if (train.seatAvailable(i, source, destination)) {
+                    seats.add(new Seat(i + ""));
+                }
+                if (seats.size() == passCount) {
+                    break;
+                }
+            }
+
+            if (seats.size() == passCount) {
+
+                ticket.setSeats(seats);
+                ticket.setStatus(TicketStatus.CONFIRMED);
+                System.out.println(ticket);
+
+                for (Seat seat : seats) {
+                    train.makeSeatUnavailable(seat.getSeatNum(), source, destination);
+                }
+
+                System.out.println("Ticket Will be upgrades " + ticket);
+                waitingList.remove(ticket);
+            }
+
+        }
+
+    }
+
+    public void printChart() {
+        boolean[][] seatMap = train.getSeatInfo();
+        for (boolean[] booleans : seatMap) {
+            for (int j = 0; j < seatMap[0].length; j++) {
+                String val = "";
+                if (booleans[j]) {
+                    val = "*";
+                } else {
+                    val = "-";
+                }
+                System.out.print(val + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}
